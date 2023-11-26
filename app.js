@@ -1,8 +1,16 @@
 const express = require('express');
 const fs = require('fs');
+const morgan=require('morgan');
 let app = express();
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
+const logger=function (req,res,next) {
+    console.log('Custom middleware called');
+    next();
+}
 app.use(express.json());
+app.use(morgan());
+app.use(logger);
+
 
 // GET - api/v1/movies
 app.get('/api/v1/movies', (req, res) => {
