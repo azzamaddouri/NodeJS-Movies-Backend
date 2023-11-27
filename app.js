@@ -1,9 +1,9 @@
 const express = require('express');
 const fs = require('fs');
-const morgan=require('morgan');
+const morgan = require('morgan');
 let app = express();
 let movies = JSON.parse(fs.readFileSync('./data/movies.json'));
-const logger=function (req,res,next) {
+const logger = function (req, res, next) {
     console.log('Custom middleware called');
     next();
 }
@@ -66,14 +66,14 @@ app.patch('/api/v1/movies/:id', (req, res) => {
     let movieToUpdate = movies.find(el => el.id === id);
     if (!movieToUpdate) {
         return res.status(404).json({
-         status:'fail',
-         meaasge:'No movie with that ID'+id+'is found'
+            status: 'fail',
+            meaasge: 'No movie with that ID' + id + 'is found'
         });
-     }
-    let index= movies.indexOf(movieToUpdate);
-    Object.assign(movieToUpdate,req.body);
-    movies[index]=movieToUpdate;
-    fs.writeFile('./data/movies.json',JSON.stringify(movies),(err)=>{
+    }
+    let index = movies.indexOf(movieToUpdate);
+    Object.assign(movieToUpdate, req.body);
+    movies[index] = movieToUpdate;
+    fs.writeFile('./data/movies.json', JSON.stringify(movies), (err) => {
         res.status(200).json({
             status: "success",
             data: {
@@ -88,15 +88,15 @@ app.delete('/api/v1/movies/:id', (req, res) => {
     // console.log(req.params);
     const id = req.params.id * 1;
     let movieToDelete = movies.find(el => el.id === id);
-    if (! movieToDelete) {
+    if (!movieToDelete) {
         return res.status(404).json({
-         status:'fail',
-         meaasge:'No movie with that ID'+id+'is found'
+            status: 'fail',
+            meaasge: 'No movie with that ID' + id + 'is found'
         });
-     }
-    let index= movies.indexOf(movieToDelete);
-    movies.splice(index,1);
-    fs.writeFile('./data/movies.json',JSON.stringify(movies),(err)=>{
+    }
+    let index = movies.indexOf(movieToDelete);
+    movies.splice(index, 1);
+    fs.writeFile('./data/movies.json', JSON.stringify(movies), (err) => {
         res.status(204).json({
             status: "success",
             data: {
@@ -105,7 +105,4 @@ app.delete('/api/v1/movies/:id', (req, res) => {
         })
     });
 });
-const port = 3000;
-app.listen(port, () => {
-    console.log('Server has started');
-});
+module.exports = app; 
